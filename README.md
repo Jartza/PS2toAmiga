@@ -1,5 +1,5 @@
 # PS2toAmiga
-Simple ATTiny85 based PS/2 to Amiga protocol converter that fits inside the keyboard.
+Simple ATTiny85 based PS/2 to Amiga keyboard protocol converter that fits inside the keyboard.
 
 The project was born as an idea to get small and color-matching keyboard to my old
 Commodore Amiga CD32 console, in order to make it more Amiga-like, in use with
