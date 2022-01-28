@@ -24,7 +24,16 @@ PS/2 keyboard protocol in it's basic level isn't that hard, it is bidirectional 
 serial port with clock (CLK) and data (DATA) lines, communicating with PS/2 keyboard using
 microcontroller has been done multiple times already - which is why I chose to use
 PS2KeyAdvanced library for Arduino to handle that task - I didn't want to re-invent the wheel,
-and I had used PS2KeyAdvanced in earlier projects as well. 
+and I had already used PS2KeyAdvanced in earlier projects as well.
+
+The keycodes read from PS/2 keyboard using PS2KeyAdvanced are then translated to the respective
+Amiga keycode and sent to wire, using
+[Amiga keyboard protocol](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0172.html).
+
+The converter-code also keeps track of user pressing CTRL-Amiga-Amiga simultaneously and
+implements [resetting the Amiga](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0179.html)
+when those keys are pressed. In PS/2 keyboard, Windows-keys are mapped to respective
+Amiga-keys on both sides of the space bar.
 
 ## Installing
 
