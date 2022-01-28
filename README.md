@@ -47,12 +47,23 @@ version 1.0.8 worked as well.
 For ATTiny85 support I used [ATTinyCore](https://github.com/SpenceKonde/ATTinyCore), again check
 their respective site for install instructions to your Arduino IDE.
 
+After installing ATTinyCore and PS2KeyAdvanced, load the project into your Arduino IDE and 
+select following settings:
+
+- **Board:** ATtiny24/45/85 (No bootloader)
+- **Chip:** ATtiny85
+- **Clock Source**: 16 MHz (PLL)
+- **TImer 1 Clock:** CPU frequency
+- **LTO:** Enabled
+- **millis():** Enabled
+
 ## PCB
 
-PCB files are in [pcb](pcb/) -folder, also including [gerbers](pcb/gerbers/) if you just want
+PCB files are in [pcb](pcb/) -folder, also including [gerbers](pcb/gerbers/), if you just want
 to order the PCB. Schematics are respectively in [schematics](schematics/) -folder.
 Bill of Materials, [BOM](schematics/BOM.txt) is also provided.
-PCB and Schematics was designed using Eagle 9.6.1 free edition.
+
+PCB and Schematics were designed using Eagle 9.6.1 free edition.
 
 ### Top side:
 ![PCB-TOP](images/amiga_ps2_adapter_top.png)
