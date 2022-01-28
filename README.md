@@ -35,6 +35,9 @@ implements [resetting the Amiga](http://amigadev.elowar.com/read/ADCD_2.1/Hardwa
 when those keys are pressed. In PS/2 keyboard, Windows-keys are mapped to respective
 Amiga-keys on both sides of the space bar.
 
+Code itself is "quick'n'dirty" -style but should be pretty much commented out so you can modify
+the internals of it to your own needs - if you have any.
+
 ## Installing
 
 See [PS2KeyAdvanced](https://github.com/techpaul/PS2KeyAdvanced) project for install instructions,
@@ -46,10 +49,11 @@ their respective site for install instructions to your Arduino IDE.
 
 ## PCB
 
+PCB files are in [pcb](pcb/) folder, also including [gerbers](pcb/gerbers/) if you just want
+to order the PCB.
+
 ### Top side:
 ![PCB-TOP](images/amiga_ps2_adapter_top.png)
 
 ### Bottom side:
 ![PCB-BOTTOM](images/amiga_ps2_adapter.png)
-
-
