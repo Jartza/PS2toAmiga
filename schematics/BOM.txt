@@ -9,7 +9,7 @@ Designator                  Part                        Footprint
  R5                         Resistor 4.7-10 kohms       0603
  ISP                        2x3 pinheader (NP)          2.54mm pitch
  J2                         1x8 pinheader (NP)          2.54mm pitch
-
+ C1                         Ceramic capacitor 0.1 uF    0603
 
  NOTE:
 
