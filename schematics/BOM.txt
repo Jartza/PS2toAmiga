@@ -1,0 +1,26 @@
+Bill of materials for PS2 to Amiga keyboard converter using ATTiny85
+====================================================================
+
+
+Designator                  Part                        Footprint
+----------                  ----                        ---------
+ U1                         ATTINY85-20SUR              SOIC-8
+ R1,R2,R3,R4                Resistor 22-47 ohms         0603
+ R5                         Resistor 4.7-10 kohms       0603
+ ISP                        2x3 pinheader (NP)          2.54mm pitch
+ J2                         1x8 pinheader (NP)          2.54mm pitch
+
+
+ NOTE:
+
+ (NP) parts = Not Populated.
+
+ ISP header is only used for programming (from the bottom side of the board!)
+ and probably doesn't need to be populated, just press programming cable
+ with header pin inserts into the connector holes and tilt a bit during
+ ATTiny85 ISP programming.
+
+ J2 is for keyboard connection but as probably this will sit inside the
+ keyboard (or in the middle of cable inside stress relief box) you will
+ most probably solder the keyboard wires directly to the header.
+ 
