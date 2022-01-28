@@ -24,7 +24,8 @@ PS/2 keyboard protocol in it's basic level isn't that hard, it is bidirectional 
 serial port with clock (CLK) and data (DATA) lines, communicating with PS/2 keyboard using
 microcontroller has been done multiple times already - which is why I chose to use
 PS2KeyAdvanced library for Arduino to handle that task - I didn't want to re-invent the wheel,
-and I had already used PS2KeyAdvanced in earlier projects as well.
+and I had already used PS2KeyAdvanced in earlier projects as well. It also has nice support
+for Caps Lock, Num Lock etc.
 
 The keycodes read from PS/2 keyboard using PS2KeyAdvanced are then translated to the respective
 Amiga keycode and sent to wire, using
@@ -56,6 +57,38 @@ select following settings:
 - **TImer 1 Clock:** CPU frequency
 - **LTO:** Enabled
 - **millis():** Enabled
+
+#### Steps to install to ATTiny85:
+
+Use whatever ISP programmer you have. I used cheap USBASP programmer with 10 -> 6 pin adapter cable,
+having header pins in ISP connector and then pushing the connector into ISP holes (no header soldered)
+and keeping them tilted in an angle during programming.
+
+1. Tools -> Burn bootloader (actually only sets fuses, and enables 16MHz PLL clock)
+2. Sketch -> Verify/Compile
+3. Upload using programmer
+
+You should be done now, if not, verify your programmer connections. I also have had issue sometimes
+programming the new parts, which are set to 1MHz default in factory - you might need to change your
+Arduino settings to slow down the programmer for Fuse burning.
+
+## Connecting the adapter
+
+Wiring the keyboard to your Amiga and PCB should be pretty obvious in the following diagram:
+
+![Connections](images/connections.png)
+
+If that is not clear enough, the underside of the PCB has each pin function named.
+
+Several Amigas have different pinouts, Google is your friend here.
+
+**Word of warning:** if you think of re-using the PS/2 keyboard cable, be warned that most of
+the keyboards only have 4-wire cable in them and probably the necessary pins are not connected
+at all (at least if the Amiga you want to connect to has mini-DIN style keyboard connector).
+I solved this issue by ordering PS/2 extension cable and just cutting off the female plug and
+then using multimeter to solve cable colors to pins connection. Those extension cables usually
+have all the 6 wires connected and it's much easier to use them than to solder those pesky
+mini-DIN connectors.
 
 ## PCB
 
