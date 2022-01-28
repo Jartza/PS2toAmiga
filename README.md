@@ -4,6 +4,7 @@ Simple ATTiny85 based PS/2 to Amiga protocol converter that fits inside the keyb
 
 ## PCB
 
-![PCB-TOP](https://github.com/Jartza/PS2toAmiga/blob/main/images/amiga_ps2_adapter_top.png)
+![PCB-BOTTOM](https://raw.githubusercontent.com/Jartza/PS2toAmiga/main/images/amiga_ps2_adapter.png)
 
-![PCB-BOTTOM](https://github.com/Jartza/PS2toAmiga/blob/main/images/amiga_ps2_adapter_bottom.png)
+![PCB-TOP](https://raw.githubusercontent.com/Jartza/PS2toAmiga/main/images/amiga_ps2_adapter_top.png)
+
