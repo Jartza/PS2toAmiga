@@ -49,8 +49,10 @@ their respective site for install instructions to your Arduino IDE.
 
 ## PCB
 
-PCB files are in [pcb](pcb/) folder, also including [gerbers](pcb/gerbers/) if you just want
-to order the PCB.
+PCB files are in [pcb](pcb/) -folder, also including [gerbers](pcb/gerbers/) if you just want
+to order the PCB. Schematics are respectively in [schematics](schematics/) -folder.
+Bill of Materials, [BOM](schematics/BOM.txt) is also provided.
+PCB and Schematics was designed using Eagle 9.6.1 free edition.
 
 ### Top side:
 ![PCB-TOP](images/amiga_ps2_adapter_top.png)
