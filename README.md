@@ -34,7 +34,8 @@ Amiga keycode and sent to wire, using
 The converter-code also keeps track of user pressing CTRL-Amiga-Amiga simultaneously and
 implements [resetting the Amiga](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0179.html)
 when those keys are pressed. In PS/2 keyboard, Windows-keys are mapped to respective
-Amiga-keys on both sides of the space bar.
+Amiga-keys on both sides of the space bar. Also if your keyboard misses the Windows/Menu -keys,
+the Left and Right Amiga keys are mapped to F11 and F12 respectively.
 
 Code itself is "quick'n'dirty" -style but should be pretty much commented out so you can modify
 the internals of it to your own needs - if you have any.
