@@ -29,8 +29,8 @@
  *   USA 
  */
 
-#include "src/avr_common.h"
-#include "src/convert_table.h"
+#include "inc/avr_common.h"
+#include "inc/convert_table.h"
 #include <avr/delay.h>
 #include <PS2KeyAdvanced.h>
 
