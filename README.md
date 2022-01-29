@@ -104,3 +104,9 @@ PCB and Schematics were designed using Eagle 9.6.1 free edition.
 
 ### Bottom side:
 ![PCB-BOTTOM](images/amiga_ps2_adapter.png)
+
+### Other
+
+Please report any [issues](https://github.com/Jartza/PS2toAmiga/issues) you find with the code!
+
+You can also participate in [discussions](https://github.com/Jartza/PS2toAmiga/discussions) without opening an issue. All enhancement ideas, questions etc. are welcome.
