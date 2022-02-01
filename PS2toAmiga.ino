@@ -28,9 +28,8 @@
  *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  *   USA 
  */
-
-#include "inc/avr_common.h"
-#include "inc/convert_table.h"
+#include "avr_common.h"
+#include "convert_table.h"
 #include <avr/delay.h>
 #include <PS2KeyAdvanced.h>
 
