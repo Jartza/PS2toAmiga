@@ -28,7 +28,7 @@ and I had already used PS2KeyAdvanced in earlier projects as well. It also has n
 for Caps Lock, Num Lock etc.
 
 The keycodes read from PS/2 keyboard using PS2KeyAdvanced are then [translated to the respective
-Amiga keycode](inc/convert_table.h) and sent to wire, using
+Amiga keycode](convert_table.h) and sent to wire, using
 [Amiga keyboard protocol](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0172.html).
 
 The converter-code also keeps track of user pressing CTRL-Amiga-Amiga simultaneously and
