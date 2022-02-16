@@ -145,6 +145,7 @@ void amiga_reset()
 
   // Reset the PS2 keyboard
   keyboard.resetKey();
+  scr_lock_state = 0;
 
   // Resync, like in power up.
   amiga_resync();
@@ -214,6 +215,7 @@ void setup()
   // Configure the PS2 library
   keyboard.begin(PS2_DATA, PS2_CLK);
   keyboard.resetKey();
+  scr_lock_state = 0;
   keyboard.setNoRepeat(1);
 }
 
