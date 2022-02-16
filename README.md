@@ -33,9 +33,13 @@ Amiga keycode](convert_table.h) and sent to wire, using
 
 The converter-code also keeps track of user pressing CTRL-Amiga-Amiga simultaneously and
 implements [resetting the Amiga](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0179.html)
-when those keys are pressed. In PS/2 keyboard, Windows-keys are mapped to respective
-Amiga-keys on both sides of the space bar. Also if your keyboard misses the Windows/Menu -keys,
-the Left and Right Amiga keys are mapped to F11 and F12 respectively.
+when those keys are pressed. 
+
+There are two different layouts, selectable with Scroll Lock (when Scroll Lock LED is on, second
+layout is in use). In first layout, Windows/Menu-keys are mapped to respective
+Amiga-keys on both sides of the space bar, Alt-keys are mapped to respective Amiga versions. 
+On second layout, Left CTRL is mapped to CTRL, Right CTRL to ALT, ALT to Right Amiga-key. Also
+on second layout, F11 and F12 are mapped to Left and Right Amiga-keys.
 
 Code itself is "quick'n'dirty" -style but should be pretty much commented out so you can modify
 the internals of it to your own needs - if you have any.
