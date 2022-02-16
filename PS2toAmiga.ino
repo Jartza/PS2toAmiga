@@ -1,33 +1,33 @@
 /*
- * PS2 to Amiga keyboard converter for ATTiny85.
- * 
- * Uses PS2KeyAdvanced Arduino library to read the PS2 keyboard, which is why you need to
- * use Arduino to compile this (and install PS2KeyAdvanced via library manager, see
- * https://www.arduino.cc/reference/en/libraries/ps2keyadvanced/)
- * 
- * Use Boards manager to install ATTinyCore (https://github.com/SpenceKonde/ATTinyCore)
- * Settings: 16MHz internal RC osc, enable millis, select chip ATTiny85.
- * 
- * Code itself is a mix of Arduino-style and low-level AVR code, as this was made to be
- * quick'n'dirty solution.
- * 
- * (C) 2022 by Jari Tulilahti / Firebay Refurb.
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the Free Software
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *   USA 
- */
+   PS2 to Amiga keyboard converter for ATTiny85.
+
+   Uses PS2KeyAdvanced Arduino library to read the PS2 keyboard, which is why you need to
+   use Arduino to compile this (and install PS2KeyAdvanced via library manager, see
+   https://www.arduino.cc/reference/en/libraries/ps2keyadvanced/)
+
+   Use Boards manager to install ATTinyCore (https://github.com/SpenceKonde/ATTinyCore)
+   Settings: 16MHz internal RC osc, enable millis, select chip ATTiny85.
+
+   Code itself is a mix of Arduino-style and low-level AVR code, as this was made to be
+   quick'n'dirty solution.
+
+   (C) 2022 by Jari Tulilahti / Firebay Refurb.
+
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+     License as published by the Free Software Foundation; either
+     version 2.1 of the License, or (at your option) any later version.
+
+     This library is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     Lesser General Public License for more details.
+
+     You should have received a copy of the GNU Lesser General Public
+     License along with this library; if not, write to the Free Software
+     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+     USA
+*/
 #include "avr_common.h"
 #include "convert_table.h"
 #include <avr/delay.h>
@@ -43,7 +43,7 @@
 #define AMICLK_DIR BITP(DDRB, AMI_CLK)
 #define AMICLK_OUT BITP(PORTB, AMI_CLK)
 #define AMICLK_IN BITP(PINB, AMI_CLK)
-#define AMIDATA_DIR BITP(DDRB, AMI_DATA)   
+#define AMIDATA_DIR BITP(DDRB, AMI_DATA)
 #define AMIDATA_OUT BITP(PORTB, AMI_DATA)
 #define AMIDATA_IN BITP(PINB, AMI_DATA)
 
@@ -56,10 +56,11 @@
     _delay_us(18); \
     AMICLK_DIR = DIR_IN; \
     code <<= 1; \
-} while(0)
+  } while(0)
 
-uint16_t c;
-uint8_t reset_state = 0;
+uint16_t code;
+uint8_t reset_state = 0b111;
+uint8_t scr_lock_state = 0;
 PS2KeyAdvanced keyboard;
 
 // Wait for ACK from Amiga. Just busy looping long enough...
@@ -70,7 +71,7 @@ static inline bool amiga_wait_ack()
   bool ack = false;
 
   // Scientifically calculated to be long enough time to wait for ACK (143ms) :D
-  for (uint32_t i = 0; i < 288000; i++)
+  for (uint32_t i = 0; i < 290000; i++)
   {
     if (AMIDATA_IN == LEVEL_LOW)
     {
@@ -83,7 +84,7 @@ static inline bool amiga_wait_ack()
   if (!ack) return false;
 
   // Wait for line to come up again, or give up
-  for (uint32_t i = 0; i < 288000; i++)
+  for (uint32_t i = 0; i < 290000; i++)
   {
     if (AMIDATA_IN == LEVEL_HIGH) return true;
   }
@@ -92,7 +93,8 @@ static inline bool amiga_wait_ack()
   return false;
 }
 
-// Resync with Amiga now
+// Resync with Amiga. According to specs, we just send
+// single bit of 1 until we get ACK.
 void amiga_resync()
 {
   bool ack = false;
@@ -101,18 +103,18 @@ void amiga_resync()
   while (!ack)
   {
     // Wait for DATA to rise up
-    while (AMIDATA_IN == LEVEL_LOW);    
+    while (AMIDATA_IN == LEVEL_LOW);
 
     // Notify computer we have data coming by pulsing DATA line briefly
     AMIDATA_DIR = DIR_OUT;
     _delay_us(18);
     AMIDATA_DIR = DIR_IN;
     _delay_us(118);
-   
+
     // Just clock single 1 bit to line
     AMIDATA_DIR = DIR_OUT;
     _delay_us(20);
-    AMICLK_DIR = DIR_OUT; 
+    AMICLK_DIR = DIR_OUT;
     _delay_us(20);
     AMICLK_DIR = DIR_IN;
     _delay_us(20);
@@ -127,23 +129,24 @@ void amiga_reset()
   // Pull CLK low
   AMICLK_DIR = DIR_OUT;
 
-  // At least 500ms needed for reset, use 600ms to be sure
-  // We can use busyloop delay here as we're resetting
-  // the machine anyway, clearing the buffer and resetting
-  // also the PS2 keyboard
+  // At least 500ms CLK low is needed for reset, use 600ms to be sure.
+  // After reset, also clear the PS2 buffer and reset the PS2 keyboard
+  // as well.
   _delay_ms(600);
 
   // Release CLK line
   AMICLK_DIR = DIR_IN;
 
-  // Empty keybpard buffer
+  // Empty PS2 keyboard buffer
   while (keyboard.available())
   {
     uint8_t c = keyboard.read();
   }
 
-  // Simultaneously reset the PS2 keyboard
+  // Reset the PS2 keyboard
   keyboard.resetKey();
+
+  // Resync, like in power up.
   amiga_resync();
 }
 
@@ -196,11 +199,11 @@ void setup()
   AMIDATA_OUT = LEVEL_LOW;
 
   // Let us sleep a second as sometimes when plugging the keyboard
-  // in, the KDB lines seem to fluctuate a bit
+  // in, the KDB lines seem to fluctuate a bit, let them stabilize.
   _delay_ms(1000);
-  
+
   // Wait for Amiga KBD lines to be pulled up
-  while(AMIDATA_IN == LEVEL_LOW | AMICLK_IN == LEVEL_LOW);
+  while (AMIDATA_IN == LEVEL_LOW | AMICLK_IN == LEVEL_LOW);
 
   // Sync keyboard with Amiga and send
   // power-up stream.
@@ -221,15 +224,18 @@ void loop( )
   if (keyboard.available())
   {
     // Read the next keycode from buffer
-    c = keyboard.read();
+    code = keyboard.read();
 
-    // Translate keycode to Amiga version
-    uint8_t ami_c = ps2amiga[c & 0xFF];
-    
-    // Send the translated keycode to Amiga KBD lines
-    // If code is 0xFF, do nothing. Extract pressed
-    // bit from status bit 15.
-    uint8_t pressed = c >> 15;
+    uint8_t lb = code & 0xFF;                   // Get the lower byte
+    uint8_t pressed = code & (1 << 15) ? 1 : 0; // Extract pressed bit from status bit 15
+
+    // Scroll lock swaps between the two translation tables
+    if (lb == 0x02) scr_lock_state = pressed;
+
+    // Translate keycode to Amiga version. Ignore codes bigger then 0xA0 (convert table size)
+    // There are two translation tables, Scroll Lock -key switches between the two
+    uint8_t ami_c = 0xFF;
+    if (lb <= 0xA0) ami_c = pgm_read_byte(&ps2amiga[scr_lock_state][lb]);
 
     // Keep the pressed state of CTRL-"Amiga"-"Amiga" (Win- or menu-key = Amiga-key) in memory
     // and perform Amiga reset if all three keys are pressed simultaneously.
@@ -237,19 +243,20 @@ void loop( )
     if (ami_c == 0x66) reset_state = (reset_state & 0b101) | (pressed << 1); // Left Amiga
     if (ami_c == 0x67) reset_state = (reset_state & 0b011) | (pressed << 2); // Right Amiga
 
-    // Reset Amiga if needed
-    if (reset_state == 0x07)
+    // Reset Amiga if needed, otherwise send keycode to Amiga.
+    if (reset_state == 0)
     {
-      reset_state = 0;
+      reset_state = 0b111;
       amiga_reset();
     }
-    else if (ami_c != 0xFF) // Ignore 0xFF, that's non-active key
+    else if (ami_c != 0xFF) // 0xFF code = do not send anything
     {
+      // Send the translated keycode to Amiga KBD lines.
       // Try sending the key until success
       bool ack = false;
       while (!ack)
       {
-        ack = amiga_send_code(ami_c, pressed);          
+        ack = amiga_send_code(ami_c, pressed);
       }
     }
   }
