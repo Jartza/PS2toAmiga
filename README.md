@@ -41,6 +41,11 @@ Amiga-keys on both sides of the space bar, Alt-keys are mapped to respective Ami
 On second layout, Left CTRL is mapped to CTRL, Right CTRL to ALT, ALT to Right Amiga-key. Also
 on second layout, F11 and F12 are mapped to Left and Right Amiga-keys.
 
+Mofifying the keyboard mapping should be pretty straight forward, in the table the comment after
+keycode denotes the respective key on PS/2 keyboard and the Amiga keycode can be checked from
+[this image](images/amigakeys.png). Do not remove values from the table, and do not change the 
+order of the items! Only change the HEX Amiga keycode, before the comment.
+
 Code itself is "quick'n'dirty" -style but should be pretty much commented out so you can modify
 the internals of it to your own needs - if you have any.
 
