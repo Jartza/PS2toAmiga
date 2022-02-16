@@ -226,8 +226,8 @@ void loop( )
     // Read the next keycode from buffer
     code = keyboard.read();
 
-    uint8_t lb = code & 0xFF;                   // Get the lower byte
-    uint8_t pressed = code & (1 << 15) ? 1 : 0; // Extract pressed bit from status bit 15
+    uint8_t lb = code & 0xFF;      // Get the lower byte
+    uint8_t pressed = code >> 15;  // Extract pressed bit from status bit 15
 
     // Scroll lock swaps between the two translation tables
     if (lb == 0x02) scr_lock_state = pressed;
