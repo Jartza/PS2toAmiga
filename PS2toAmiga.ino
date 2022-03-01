@@ -47,6 +47,10 @@
 #define AMIDATA_OUT BITP(PORTB, AMI_DATA)
 #define AMIDATA_IN BITP(PINB, AMI_DATA)
 
+// Scientifically calculated to be long enough time to wait for ACK (143ms) :D
+#define ACK_DELAY 300000
+
+
 // Macro to send single bit to Amiga KBD lines
 #define SENDBIT() do { \
     _delay_us(20); \
@@ -70,8 +74,8 @@ static inline bool amiga_wait_ack()
 {
   bool ack = false;
 
-  // Scientifically calculated to be long enough time to wait for ACK (143ms) :D
-  for (uint32_t i = 0; i < 290000; i++)
+  // We should wait at least 143ms for ACK
+  for (uint32_t i = 0; i < ACK_DELAY; i++)
   {
     if (AMIDATA_IN == LEVEL_LOW)
     {
@@ -84,7 +88,7 @@ static inline bool amiga_wait_ack()
   if (!ack) return false;
 
   // Wait for line to come up again, or give up
-  for (uint32_t i = 0; i < 290000; i++)
+  for (uint32_t i = 0; i < ACK_DELAY; i++)
   {
     if (AMIDATA_IN == LEVEL_HIGH) return true;
   }
